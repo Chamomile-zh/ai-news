@@ -1,0 +1,26 @@
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
+import path from 'path'
+
+const repositoryName = process.env.GITHUB_REPOSITORY?.split('/')[1]
+const pagesBase = repositoryName?.endsWith('.github.io')
+  ? '/'
+  : `/${repositoryName || 'ai-news-aggregator'}/`
+
+export default defineConfig({
+  plugins: [react()],
+  base: process.env.GITHUB_PAGES ? pagesBase : '/',
+  server: {
+    port: 3000,
+    open: true,
+    fs: {
+      allow: ['..']
+    }
+  },
+  publicDir: path.resolve(__dirname, '../'),
+  build: {
+    outDir: 'dist',
+    assetsDir: 'assets',
+    copyPublicDir: false,
+  },
+})
